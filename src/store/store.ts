@@ -9,7 +9,8 @@ export class Store {
   // constructor function with two params - reducer with default empty object and initialState with default empty object
   // initialize state as initialState with a default empty object
   constructor(reducers = {}, initialState = {}) {
-    this.state = initialState; // initialState will be bound internally to this.state
+    this.reducers = reducers; // internal access to reducers inside store
+    this.state = this.reduce(initialState, {}); // at runtime call reduce function - initialState will be bound internally to this.state
   }
 
   // typescript get property, to get state
@@ -20,11 +21,21 @@ export class Store {
 
   // dispatch will merge the new object into existing state oject
   dispatch(action) {
-    this.state = {
-      ...this.state,
-      todos: [...this.state.todos, action.payload] // becomes new representation of this.state
-    }
-
+    this.state = this.reduce(this.state, action); // becomes new representation of this.state
   }
+
+  private reduce(state, action) {
+    const newState = {};
+    // magic happens...
+    // loop over all reducers here
+    for (const prop in this.reducers) {
+      // creates new object with property todos
+      newState[prop] = this.reducers[prop](state[prop], action); // call the correct reducers
+      // this is equivalent to: newState.todos = this.reducers.todos()
+      // but this way is done dynamically using the the property (prop)
+    }
+    return newState;
+  }
+
 
 }

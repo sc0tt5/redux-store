@@ -6,12 +6,13 @@ const button = document.querySelector('button') as HTMLButtonElement;
 const destroy = document.querySelector('.unsubscribe') as HTMLButtonElement;
 const todoList = document.querySelector('.todos') as HTMLLIElement;
 
-// create intitial state
-const store = new fromStore.Store({}, {
-  todos: [{ lable: 'Eat pizza', complete: false }]
-});
+// reference to reducer
+const reducers = {
+  todos: fromStore.reducer
+};
 
-console.log(store.value);
+// create intitial state
+const store = new fromStore.Store(reducers); // pass reducers into store
 
 button.addEventListener(
   'click',
@@ -25,6 +26,8 @@ button.addEventListener(
       type: 'ADD_TODO',
       payload
     });
+
+    console.log(store.value);
 
     input.value = '';
   },
