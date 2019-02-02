@@ -18,4 +18,13 @@ export class Store {
     return this.state;
   }
 
+  // dispatch will merge the new object into existing state oject
+  dispatch(action) {
+    this.state = {
+      ...this.state,
+      todos: [...this.state.todos, action.payload] // becomes new representation of this.state
+    }
+
+  }
+
 }

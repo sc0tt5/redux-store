@@ -20,7 +20,11 @@ button.addEventListener(
 
     const payload = { label: input.value, complete: false };
 
-    console.log(payload);
+    // dispatch to state -- add todo
+    store.dispatch({
+      type: 'ADD_TODO',
+      payload
+    });
 
     input.value = '';
   },
