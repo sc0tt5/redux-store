@@ -5,7 +5,6 @@ export function renderTodos(collection) {
   span.innerHTML = collection.length;
   todoList.innerHTML = '';
   // this is not an ideal way to update the dom and only used for demostration purposes
-  console.log('collection:::', collection)
   for (const item of collection) {
     todoList.innerHTML += `
     	<li>
