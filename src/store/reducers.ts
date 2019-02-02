@@ -2,7 +2,7 @@
 export const initialState = {
   loaded: false,
   loading: false,
-  data: [{ lable: 'Eat pizza', complete: false }] // reducer will handle initial state
+  data: [{ label: 'Eat pizza', complete: false }] // reducer will handle initial state
 };
 
 // retducer function

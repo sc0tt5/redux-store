@@ -9,6 +9,7 @@ export class Store {
   // constructor function with two params - reducer with default empty object and initialState with default empty object
   // initialize state as initialState with a default empty object
   constructor(reducers = {}, initialState = {}) {
+    this.subscribers = [];
     this.reducers = reducers; // internal access to reducers inside store
     this.state = this.reduce(initialState, {}); // at runtime call reduce function - initialState will be bound internally to this.state
   }
@@ -19,9 +20,26 @@ export class Store {
     return this.state;
   }
 
+  // notify sumscribers when state updates
+  subscribe(fn) {
+    this.subscribers = [...this.subscribers, fn];
+    this.notify(); // each time something subscribes, immediately provide state data ...should know initially and with each additional change
+    // to prevent memory leaks, enabl unsubscribe functionality
+    return () => {
+      this.subscribers = this.subscribers.filter(sub => sub !== fn)
+    }
+  }
+
   // dispatch will merge the new object into existing state oject
   dispatch(action) {
     this.state = this.reduce(this.state, action); // becomes new representation of this.state
+    this.notify(); // notify subscribers of new state
+  }
+
+  private notify() {
+    // loop through subscriber list and pass each the new state
+    this.subscribers.forEach(fn => fn(this.value));
+    // this.value returns this.state so we can access inside subscription
   }
 
   private reduce(state, action) {

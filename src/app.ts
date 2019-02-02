@@ -14,6 +14,7 @@ const reducers = {
 // create intitial state
 const store = new fromStore.Store(reducers); // pass reducers into store
 
+// add todo
 button.addEventListener(
   'click',
   () => {
@@ -34,9 +35,21 @@ button.addEventListener(
   false
 );
 
+// to prevent memory leaks use unsubscribe
+const unsubscribe = store.subscribe(state => {
+  // render todo list on page
+  renderTodos(state.todos.data);
+});
+
+// unsubscribe
+destroy.addEventListener('click', unsubscribe, false)
+
+// delete
 todoList.addEventListener('click', function (event) {
   const target = event.target as HTMLButtonElement;
   if (target.nodeName.toLowerCase() === 'button') {
     console.log(target);
   }
 });
+
+store.subscribe(state => console.log('STATE::: ', state));
